@@ -1,0 +1,35 @@
+Part			Package				Pin Spacing	I/Os	
+
+
+iCE40-LP384-QN32	32-pin QFN (5 x 5 mm)		0.50 mm		21	
+iCE40-LP1K-QN84		84-pin QFNS (7 x 7 mm)		0.50 mm		67
+iCE40-HX1K-VQ100	100-pin VQFP (14 x 14 mm)	0.50 mm		72	
+iCE40-HX1K-TQ144	144-pin TQFP (20 x 20 mm)	0.50 mm		96	
+iCE40-HX4K-TQ144	144-pin TQFP (20 x 20 mm)	0.50 mm		107	
+iCE40-UP5K-SG48		48-pin QFN (7 x 7 mm)		0.50 mm		39	
+
+iCE40-LP384-CM36	36-ball ucBGA (2.5 x 2.5 mm)	0.40 mm		25	
+iCE40-LP384-CM49	49-ball ucBGA (3 x 3 mm)	0.40 mm		37	
+iCE40-LP1K-SWG16TR	16-ball WLCSP (1.40 x 1.48 mm)	0.35 mm		10	
+iCE40-LP1K-CM36		36-ball ucBGA (2.5 x 2.5 mm)	0.40 mm		25	
+iCE40-LP1K-CM49		49-ball ucBGA (3 x 3 mm)	0.40 mm		35	
+iCE40-LP1K-CM81		81-ball ucBGA (4 x 4 mm)	0.40 mm		63	
+iCE40-LP1K-CM121	121-ball ucBGA (5 x 5 mm)	0.40 mm		95	
+iCE40-LP1K-CB81		81-ball csBGA (5 x 5 mm)	0.50 mm		62	
+iCE40-LP1K-CB121	121-ball csBGA (6 x 6 mm)	0.50 mm		92	
+iCE40-LP4K-CM121	121-ball ucBGA (5 x 5 mm)	0.40 mm		93	
+iCE40-LP4K-CM81		81-ball ucBGA (4 x 4 mm)	0.40 mm		63	
+iCE40-LP4K-CM225	225-ball ucBGA (7 x 7 mm)	0.40 mm		167	
+iCE40-LP8K-CM81		81-ball ucBGA (4 x 4 mm)	0.40 mm		63	
+iCE40-LP8K-CM121	121-ball ucBGA (5 x 5 mm)	0.40 mm		93	
+iCE40-LP8K-CM225	225-ball ucBGA (7 x 7 mm)	0.40 mm		178	
+iCE40-HX1K-CB132	132-ball csBGA (8 x 8 mm)	0.50 mm		95	
+iCE40-HX4K-CB132	132-ball csBGA (8 x 8 mm)	0.50 mm		95	
+iCE40-HX4K-BG121	121-ball caBGA (9 x 9 mm)	0.80 mm		93	
+iCE40-HX8K-BG121	121-ball caBGA (9 x 9 mm)	0.80 mm		93	
+iCE40-HX8K-CT256	256-ball caBGA (14 x 14 mm)	0.80 mm		206	
+iCE40-HX8K-CB132	132-ball csBGA (8 x 8 mm)	0.50 mm		95	
+iCE40-HX8K-CM225	225-ball ucBGA (7 x 7 mm)	0.40 mm		178	
+iCE40-UP3K-UWG30	30-ball WLCSP (2.15 x 2.55 mm)	0.40 mm		21	
+iCE40-UP5K-UWG30	30-ball WLCSP (2.15 x 2.55 mm)	0.40 mm		21	
+

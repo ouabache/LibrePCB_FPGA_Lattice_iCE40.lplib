@@ -1,0 +1,6 @@
+./csv2librePCB iCE40-LP384-QN32
+./csv2librePCB iCE40-LP1K-QN84
+./csv2librePCB iCE40-UP5K-SG48
+./csv2librePCB iCE40-HX4K-TQ144
+./csv2librePCB iCE40-HX1K-TQ144
+./csv2librePCB iCE40-HX1K-VQ100

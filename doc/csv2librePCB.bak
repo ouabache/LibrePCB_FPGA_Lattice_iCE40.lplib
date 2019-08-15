@@ -1,0 +1,584 @@
+eval 'exec `which perl` -S $0 ${1+"$@"}'
+   if 0;
+
+#/**********************************************************************/
+#/*                                                                    */
+#/*             -------                                                */
+#/*            /   SOC  \                                              */
+#/*           /    GEN   \                                             */
+#/*          /    TOOL    \                                            */
+#/*          ==============                                            */
+#/*          |            |                                            */
+#/*          |____________|                                            */
+#/*                                                                    */
+#/*  Converts a csv source file into a libre_PCB symbol                */
+#/*                                                                    */
+#/*                                                                    */
+#/*  Author(s):                                                        */
+#/*      - John Eaton, jt_eaton@opencores.org                          */
+#/*                                                                    */
+#/**********************************************************************/
+#/*                                                                    */
+#/*    Copyright (C) <2018>  <Ouabache Design Works>                   */
+#/*                                                                    */
+#/*  This source file may be used and distributed without              */
+#/*  restriction provided that this copyright statement is not         */
+#/*  removed from the file and that any derivative work contains       */
+#/*  the original copyright notice and the associated disclaimer.      */
+#/*                                                                    */
+#/*  This source file is free software; you can redistribute it        */
+#/*  and/or modify it under the terms of the GNU Lesser General        */
+#/*  Public License as published by the Free Software Foundation;      */
+#/*  either version 2.1 of the License, or (at your option) any        */
+#/*  later version.                                                    */
+#/*                                                                    */
+#/*  This source is distributed in the hope that it will be            */
+#/*  useful, but WITHOUT ANY WARRANTY; without even the implied        */
+#/*  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR           */
+#/*  PURPOSE.  See the GNU Lesser General Public License for more      */
+#/*  details.                                                          */
+#/*                                                                    */
+#/*  You should have received a copy of the GNU Lesser General         */
+#/*  Public License along with this source; if not, download it        */
+#/*  from http://www.opencores.org/lgpl.shtml                          */
+#/*                                                                    */
+#/**********************************************************************/
+
+
+
+############################################################################
+# General PERL config
+############################################################################
+use Getopt::Long;
+use English;
+use File::Basename;
+use Cwd;
+$OUTPUT_AUTOFLUSH = 1; # set autoflush of stdout to TRUE.
+
+
+
+
+############################################################################
+### Process the options
+############################################################################
+
+Getopt::Long::config("require_order", "prefix=-");
+GetOptions("h",
+           "Part=s" => \$Part
+) || die "(use 'dk_sym2librePCB -h' for help)";
+
+
+##############################################################################
+## Help option
+##############################################################################
+if ( ($opt_h eq "1") ) 
+  { print "\n type csv2librePCB filename";
+    print "\n";
+    exit 1;
+  }
+
+
+
+#############################################################################
+## 
+## 
+#############################################################################
+
+my $home           = cwd();
+
+my $prog_name         = $ARGV[0];
+
+my $input_file   = "./device_pinouts/${prog_name}\.csv";
+
+$prog_name = uc $prog_name;
+print "Reading csv    File  $input_file\n";
+
+
+my $vcc_cnt      = 0;
+my $vccio_cnt    = 0;
+my $vccio_0_cnt  = 0;
+my $vccio_1_cnt  = 0;
+my $vccio_2_cnt  = 0;
+my $vccio_3_cnt  = 0;
+my $gnd_cnt      = 0;
+my $nc_cnt       = 0;
+my $vpp_cnt      = 0;
+my $vccpll_cnt      = 0;
+my $gndpll_cnt      = 0;
+my $config_cnt      = 0;
+
+
+
+
+my $R_count = 0;
+my $L_count = 0;
+
+
+open   FILE, $input_file;
+  while(<FILE>)
+  {
+       if(/(\w+),(\w+),(\w+),(\w+),(\w+)/)
+          { 
+            $cmp_name  = $1;
+	    $side      = $2;
+	    $type      = $3;
+	    $bank      = $4;
+	    $ball      = $5;
+
+            if($cmp_name eq "VCC")
+	      {
+	      $cmp_name = "VCC_${vcc_cnt}";
+              $vcc_cnt  = $vcc_cnt +1;
+              }
+
+            if($cmp_name eq "VCCIO")
+	      {
+	      $cmp_name = "VCCIO__${vccio_cnt}";
+              $vccio_cnt  = $vccio_cnt +1;
+              }
+
+
+            if($cmp_name eq "VCCIO_0")
+	      {
+	      $cmp_name = "VCCIO_0_${vccio_0_cnt}";
+              $vccio_0_cnt  = $vccio_0_cnt +1;
+              }
+
+
+            if($cmp_name eq "VCCIO_1")
+	      {
+	      $cmp_name = "VCCIO_1_${vccio_1_cnt}";
+              $vccio_1_cnt  = $vccio_1_cnt +1;
+              }
+
+
+            if($cmp_name eq "VCCIO_2")
+	      {
+	      $cmp_name = "VCCIO_2_${vccio_2_cnt}";
+              $vccio_2_cnt  = $vccio_2_cnt +1;
+              }
+
+
+            if($cmp_name eq "VCCIO_3")
+	      {
+	      $cmp_name = "VCCIO_3_${vccio_3_cnt}";
+              $vccio_3_cnt  = $vccio_3_cnt +1;
+              }
+
+
+            if($cmp_name eq "GND")
+	      {
+	      $cmp_name = "GND_${gnd_cnt}";
+              $gnd_cnt  = $gnd_cnt +1;
+              }
+
+
+            if($cmp_name eq "NC")
+	      {
+	      $cmp_name = "NC_${nc_cnt}";
+              $nc_cnt  = $nc_cnt +1;
+              }
+
+
+
+            if($cmp_name eq "VPP")
+	      {
+	      $cmp_name = "VPP_${vpp_cnt}";
+              $vpp_cnt  = $vpp_cnt +1;
+              }
+
+
+            if($cmp_name eq "VCCPLL")
+	      {
+	      $cmp_name = "VCCPLL_${vccpll_cnt}";
+              $vccpll_cnt  = $vccpll_cnt +1;
+              }
+
+            if($cmp_name eq "GNDPLL")
+	      {
+	      $cmp_name = "GNDPLL_${gndpll_cnt}";
+              $gndpll_cnt  = $gndpll_cnt +1;
+              }
+
+
+
+
+             if($side eq "R")
+	     {
+             $R_count =  $R_count +1;
+             }
+             else
+	     {
+             $L_count =  $L_count +1;
+             }
+
+
+
+
+
+            my $signal_uuid =  uuid();
+
+
+
+            my $line      = "${cmp_name},${side},${type},${bank},${ball},${signal_uuid}\n";
+            push @intel_hex, $line  ;
+           }
+  }
+
+
+
+#
+# Create sym director and symbol file
+#
+#
+#
+
+
+
+
+my $path           = "${home}/sym";
+mkdir $path,0755       unless( -e $path );
+my $symbol_uuid =  uuid();
+$path      = "${home}/sym/${symbol_uuid}";
+mkdir $path,0755   unless( -e $path );
+my $output_file  = "${home}/sym/${symbol_uuid}/symbol.lp";
+my $librepcb_file  = "${home}/sym/${symbol_uuid}/.librepcb-sym";
+open  LIBREPCB_SYM , ">  $librepcb_file";
+printf LIBREPCB_SYM ("0.1\n");
+close  LIBREPCB_SYM ;
+print "Writing librePCB  File  $output_file\n";  
+open  LIBREPCB_SYM , ">  $output_file";
+
+printf LIBREPCB_SYM ("(librepcb_symbol %s\n",$symbol_uuid);
+printf LIBREPCB_SYM (" (name \"%s\")\n",$prog_name);
+printf LIBREPCB_SYM (" (description \"Lattice iCE40 fpga \\n%s\\nGenerated file---do not edit---\\n\" )\n",$prog_name);
+printf LIBREPCB_SYM (" (keywords \"fpga,Lattice,iCE40,%s\" )\n",$prog_name);
+printf LIBREPCB_SYM (" (author \"ouabacheDesignWorks\")\n");
+printf LIBREPCB_SYM (" (version \"0.1\")\n");
+printf LIBREPCB_SYM (" (created 2019-08-09T23:28:56Z)\n");
+printf LIBREPCB_SYM (" (deprecated false)\n");
+printf LIBREPCB_SYM (" (category c3dfb625-e6e4-46c1-a1df-d14eeecfc965)\n");
+
+my $unit     = 2.54;
+
+my $base_y  = 0;
+
+
+if($R_count >= $L_count)
+{
+             $base_y = int( $R_count/2);
+
+}
+else
+
+{
+             $base_y =  int($L_count/2);
+
+}
+
+
+
+
+
+
+my $R_position_x = 25.4;
+my $R_position_y = $base_y * $unit;
+
+my $L_position_x = -25.4;
+my $L_position_y = $base_y * $unit;
+
+
+
+foreach $line (@intel_hex)
+  {
+
+
+
+   $_ = $line; 
+       if(/(\w+),(\w+),(\w+),(\w+),(\w+),(\S+)/)
+          { 
+            $cmp_name  = $1;
+	    $side      = $2;
+	    $type      = $3;
+	    $bank      = $4;
+	    $ball      = $5;
+	    $signal_uuid      = $6;
+            $result    = $signal_uuid ;
+
+
+
+
+             if($side eq "R")
+	     {
+             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$result,$cmp_name);
+ 	     printf LIBREPCB_SYM  (" (position %.2f %.2f ) (rotation 180.0 )    ( length 2.54 )\n)\n", $R_position_x,$R_position_y     );
+             $R_position_y =  $R_position_y -2.54;
+             }
+             else
+	     {
+             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$result,$cmp_name);
+ 	     printf LIBREPCB_SYM  (" (position %.2f %.2f ) (rotation 0.0 )    ( length 2.54 )\n)\n", $L_position_x,$L_position_y     );
+             $L_position_y =  $L_position_y -2.54;
+             }
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+my $position_y = 0;
+
+if($R_position_y >= $L_position_y)
+{
+             $position_y =  $L_position_y -2.54;
+
+}
+else
+
+{
+             $position_y =  $R_position_y -2.54;
+
+}
+
+
+my $T_position_y = ($base_y * $unit) + (2* $unit);
+
+$result =  uuid();
+printf LIBREPCB_SYM ("(polygon %s (layer sym_outlines)\n",$result);
+printf LIBREPCB_SYM ("  (width 0.254) (fill false) (grab_area true)\n");
+printf LIBREPCB_SYM ("  (vertex (position -22.86 %.2f) (angle 0.0))\n",$T_position_y);
+printf LIBREPCB_SYM ("  (vertex (position 22.86  %.2f) (angle 0.0))\n",$T_position_y);
+printf LIBREPCB_SYM ("  (vertex (position 22.86 %.2f) (angle 0.0))\n",$position_y);
+printf LIBREPCB_SYM ("  (vertex (position -22.86 %.2f) (angle 0.0))\n",$position_y);
+printf LIBREPCB_SYM ("  (vertex (position -22.86 %.2f) (angle 0.0))\n",$T_position_y);
+printf LIBREPCB_SYM (" )\n");
+
+$position_y =  $position_y -  $unit ;
+$result =  uuid();
+printf LIBREPCB_SYM (" (text %s (layer sym_values) (value \"{{VALUE}}\")\n",$result);
+printf LIBREPCB_SYM ("  (align left top) (height 2.54) (position -22.86  %.2f) (rotation 0.0)\n",$position_y);
+printf LIBREPCB_SYM (" )\n");
+$result =  uuid();
+
+ $T_position_y = $T_position_y +  $unit;
+printf LIBREPCB_SYM (" (text %s (layer sym_names) (value \"{{NAME}}\")\n",$result);
+printf LIBREPCB_SYM ("  (align left bottom) (height 2.54) (position -22.86  %.2f ) (rotation 0.0)\n",$T_position_y);
+printf LIBREPCB_SYM (" )\n");
+printf LIBREPCB_SYM (")\n");
+
+
+close  LIBREPCB_SYM ;
+
+
+
+
+
+#
+# Create cmp director and component file
+#
+#
+#
+
+
+
+
+my $path           = "${home}/cmp";
+mkdir $path,0755       unless( -e $path );
+my $component_uuid =  uuid();
+$path      = "${home}/cmp/${component_uuid}";
+mkdir $path,0755   unless( -e $path );
+my $output_file  = "${home}/cmp/${component_uuid}/component.lp";
+my $librepcb_file  = "${home}/cmp/${component_uuid}/.librepcb-cmp";
+open  LIBREPCB_CMP , ">  $librepcb_file";
+printf LIBREPCB_CMP ("0.1\n");
+close  LIBREPCB_CMP ;
+print "Writing librePCB  File  $output_file\n";  
+open  LIBREPCB_CMP , ">  $output_file";
+
+printf LIBREPCB_CMP ("(librepcb_component %s\n",$component_uuid);
+printf LIBREPCB_CMP (" (name \"%s\")\n",$prog_name);
+printf LIBREPCB_CMP (" (description \"Lattice iCE40 fpga \\n%s\\nGenerated file---do not edit---\\n\" )\n",$prog_name);
+printf LIBREPCB_CMP (" (keywords \"fpga,Lattice,iCE40,%s\" )\n",$prog_name);
+printf LIBREPCB_CMP (" (author \"ouabacheDesignWorks\")\n");
+printf LIBREPCB_CMP (" (version \"0.1\")\n");
+printf LIBREPCB_CMP (" (created 2019-08-09T23:28:56Z)\n");
+printf LIBREPCB_CMP (" (deprecated false)\n");
+printf LIBREPCB_CMP (" (category c3dfb625-e6e4-46c1-a1df-d14eeecfc965)\n");
+printf LIBREPCB_CMP (" (schematic_only false)\n");
+printf LIBREPCB_CMP (" (default_value \"{{PARTNUMBER or DEVICE}}\")\n");
+printf LIBREPCB_CMP (" (prefix \"U\")\n");
+
+
+
+
+
+
+
+
+
+foreach $line (@intel_hex)
+  {
+   $_ = $line; 
+       if(/(\w+),(\w+),(\w+),(\w+),(\w+),(\S+)/)
+          { 
+            $cmp_name  = $1;
+	    $side      = $2;
+	    $type      = $3;
+	    $bank      = $4;
+	    $ball      = $5;
+	    $signal_uuid      = $6;
+            printf LIBREPCB_CMP ("   (signal %s  (name \"%s\") (role passive)\n",$signal_uuid,$cmp_name);
+
+            if( $side eq "L")
+	    {
+            printf LIBREPCB_CMP  ("   (required true) (negated false) (clock false) (forced_net \"\")\n   )\n"   );
+            }
+	    else
+	    {
+            printf LIBREPCB_CMP  ("   (required false) (negated false) (clock false) (forced_net \"\")\n   )\n"   );
+            }
+
+        }
+
+    }
+
+
+
+$variant_uuid = uuid();
+$gate_uuid = uuid();
+
+
+printf LIBREPCB_CMP ("(variant %s (norm \"\")\n",$variant_uuid);
+printf LIBREPCB_CMP ("(name \"default\")\n");
+printf LIBREPCB_CMP ("(description \"\")\n");
+printf LIBREPCB_CMP ("(gate %s \n",$gate_uuid);
+printf LIBREPCB_CMP ("(symbol %s )\n",$symbol_uuid);
+printf LIBREPCB_CMP ("(position 0.0 0.0) (rotation 0.0) (required true) (suffix \"\")\n");
+
+
+
+
+
+foreach $line (@intel_hex)
+  {
+   $_ = $line; 
+       if(/(\w+),(\w+),(\w+),(\w+),(\w+),(\S+)/)
+          { 
+            $cmp_name  = $1;
+	    $side      = $2;
+	    $type      = $3;
+	    $bank      = $4;
+	    $ball      = $5;
+	    $signal_uuid      = $6;
+            $pin_uuid  = uuid();
+	    printf LIBREPCB_CMP ("   (pin %s  (signal %s ) (text signal))\n",$pin_uuid,$signal_uuid);
+        }
+
+    }
+
+
+
+
+
+
+printf LIBREPCB_CMP (")\n)\n)\n");
+
+close  LIBREPCB_CMP ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#############################################################################
+## 
+##  convert 0-9,A-F to decimal or 0 if out of range
+## 
+#############################################################################
+
+
+sub cvt { 
+
+$temp =    ord($_[0]);
+if( $temp <= 48) { return 0 }
+if( $temp <= 58) { return $temp - 48 }
+if( $temp <= 64) { return 0 }
+if( $temp <= 70) { return ($temp - 65)+10 }
+return 0;
+
+
+
+}
+
+
+
+
+
+
+
+#############################################################################
+## 
+##  Create random UUID
+## 
+#############################################################################
+
+
+sub uuid { 
+
+  my $uuid1 = rand(65536);
+  my $uuid2 = rand(65536);
+  my $uuid3 = rand(65536);
+  my $uuid4 = rand(4096);
+  my $uuid5 = rand(4096);
+  my $uuid6 = rand(65536);
+  my $uuid7 = rand(65536);
+  my $uuid8 = rand(65536);
+
+my $temp =   sprintf("%04x%04x-%04x-4%03x-8%03x-%04x%04x%04x", $uuid1,$uuid2,$uuid3,$uuid4,$uuid5,$uuid6,$uuid7,$uuid8 );
+
+ 
+return $temp;
+
+
+
+}
+
+
+
+
+
+
+
+1
+
+
