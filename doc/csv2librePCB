@@ -208,7 +208,8 @@ open   FILE, $input_file;
              }
 
             my $signal_uuid =  uuid();
-            my $line      = "${cmp_name},${side},${type},${bank},${ball},${signal_uuid}\n";
+	    my $pin_uuid =  uuid();
+            my $line      = ":::${cmp_name}:::${side}:::${type}:::${bank}:::${ball}:::${signal_uuid}:::${pin_uuid}:::\n";
             push @pin_buffer_array, $line  ;
            }
   }
@@ -272,7 +273,7 @@ my $L_position_y = $base_y * $unit;
 foreach $line (@pin_buffer_array)
   {
    $_ = $line; 
-       if(/(\w+),(\w+),(\w+),(\w+),(\w+),(\S+)/)
+       if(/:::(\w+):::(\w+):::(\w+):::(\w+):::(\w+):::(\S+):::(\S+):::/)
           { 
             $cmp_name  = $1;
 	    $side      = $2;
@@ -280,16 +281,17 @@ foreach $line (@pin_buffer_array)
 	    $bank      = $4;
 	    $ball      = $5;
 	    $signal_uuid      = $6;
-            $result    = $signal_uuid ;
+	    $pin_uuid      = $7;
+
             if($side eq "R")
 	     {
-             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$result,$cmp_name);
+             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$signal_uuid,$cmp_name);
  	     printf LIBREPCB_SYM  (" (position %.2f %.2f ) (rotation 180.0 )    ( length 2.54 )\n)\n", $R_position_x,$R_position_y     );
              $R_position_y =  $R_position_y -2.54;
              }
              else
 	     {
-             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$result,$cmp_name);
+             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$signal_uuid,$cmp_name);
  	     printf LIBREPCB_SYM  (" (position %.2f %.2f ) (rotation 0.0 )    ( length 2.54 )\n)\n", $L_position_x,$L_position_y     );
              $L_position_y =  $L_position_y -2.54;
              }
@@ -384,7 +386,7 @@ printf LIBREPCB_CMP (" (prefix \"U\")\n");
 foreach $line (@pin_buffer_array)
   {
    $_ = $line; 
-       if(/(\w+),(\w+),(\w+),(\w+),(\w+),(\S+)/)
+       if(/:::(\w+):::(\w+):::(\w+):::(\w+):::(\w+):::(\S+):::(\S+):::/)
           { 
             $cmp_name  = $1;
 	    $side      = $2;
@@ -392,7 +394,8 @@ foreach $line (@pin_buffer_array)
 	    $bank      = $4;
 	    $ball      = $5;
 	    $signal_uuid      = $6;
-            printf LIBREPCB_CMP ("   (signal %s  (name \"%s\") (role passive)\n",$signal_uuid,$cmp_name);
+	    $pin_uuid      = $7;
+            printf LIBREPCB_CMP ("   (signal %s  (name \"%s\") (role passive)\n",$pin_uuid,$cmp_name);
 
             if( $side eq "L")
 	    {
@@ -421,16 +424,16 @@ printf LIBREPCB_CMP ("(position 0.0 0.0) (rotation 0.0) (required true) (suffix 
 foreach $line (@pin_buffer_array)
   {
    $_ = $line; 
-       if(/(\w+),(\w+),(\w+),(\w+),(\w+),(\S+)/)
+       if(/:::(\w+):::(\w+):::(\w+):::(\w+):::(\w+):::(\S+):::(\S+):::/)
           { 
-            $cmp_name  = $1;
-	    $side      = $2;
-	    $type      = $3;
-	    $bank      = $4;
-	    $ball      = $5;
-	    $signal_uuid      = $6;
-            $pin_uuid  = uuid();
-	    printf LIBREPCB_CMP ("   (pin %s  (signal %s ) (text signal))\n",$pin_uuid,$signal_uuid);
+            $cmp_name      = $1;
+	    $side          = $2;
+	    $type          = $3;
+	    $bank          = $4;
+	    $ball          = $5;
+	    $signal_uuid   = $6;
+            $pin_uuid      = $7;;
+	    printf LIBREPCB_CMP ("   (pin %s  (signal %s ) (text signal))\n",$signal_uuid,$pin_uuid);
         }
 
     }

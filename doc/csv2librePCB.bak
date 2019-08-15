@@ -15,11 +15,11 @@ eval 'exec `which perl` -S $0 ${1+"$@"}'
 #/*                                                                    */
 #/*                                                                    */
 #/*  Author(s):                                                        */
-#/*      - John Eaton, jt_eaton@opencores.org                          */
+#/*      - John Eaton                                                  */
 #/*                                                                    */
 #/**********************************************************************/
 #/*                                                                    */
-#/*    Copyright (C) <2018>  <Ouabache Design Works>                   */
+#/*    Copyright (C) <2019>  <Ouabache Design Works>                   */
 #/*                                                                    */
 #/*  This source file may be used and distributed without              */
 #/*  restriction provided that this copyright statement is not         */
@@ -84,30 +84,25 @@ if ( ($opt_h eq "1") )
 ## 
 #############################################################################
 
-my $home           = cwd();
-
-my $prog_name         = $ARGV[0];
-
-my $input_file   = "./device_pinouts/${prog_name}\.csv";
-
-$prog_name = uc $prog_name;
+my $home            = cwd();
+my $prog_name       = $ARGV[0];
+my $input_file      = "./device_pinouts/${prog_name}\.csv";
+$prog_name          = uc $prog_name;
 print "Reading csv    File  $input_file\n";
 
 
-my $vcc_cnt      = 0;
-my $vccio_cnt    = 0;
-my $vccio_0_cnt  = 0;
-my $vccio_1_cnt  = 0;
-my $vccio_2_cnt  = 0;
-my $vccio_3_cnt  = 0;
-my $gnd_cnt      = 0;
-my $nc_cnt       = 0;
-my $vpp_cnt      = 0;
+my $vcc_cnt         = 0;
+my $vccio_cnt       = 0;
+my $vccio_0_cnt     = 0;
+my $vccio_1_cnt     = 0;
+my $vccio_2_cnt     = 0;
+my $vccio_3_cnt     = 0;
+my $gnd_cnt         = 0;
+my $nc_cnt          = 0;
+my $vpp_cnt         = 0;
 my $vccpll_cnt      = 0;
 my $gndpll_cnt      = 0;
 my $config_cnt      = 0;
-
-
 
 
 my $R_count = 0;
@@ -212,16 +207,10 @@ open   FILE, $input_file;
              $L_count =  $L_count +1;
              }
 
-
-
-
-
             my $signal_uuid =  uuid();
-
-
-
-            my $line      = "${cmp_name},${side},${type},${bank},${ball},${signal_uuid}\n";
-            push @intel_hex, $line  ;
+	    my $pin_uuid =  uuid();
+            my $line      = ":::${cmp_name}:::${side}:::${type}:::${bank}:::${ball}:::${signal_uuid}:::${pin_uuid}:::\n";
+            push @pin_buffer_array, $line  ;
            }
   }
 
@@ -236,18 +225,18 @@ open   FILE, $input_file;
 
 
 
-my $path           = "${home}/sym";
-mkdir $path,0755       unless( -e $path );
-my $symbol_uuid =  uuid();
-$path      = "${home}/sym/${symbol_uuid}";
-mkdir $path,0755   unless( -e $path );
-my $output_file  = "${home}/sym/${symbol_uuid}/symbol.lp";
-my $librepcb_file  = "${home}/sym/${symbol_uuid}/.librepcb-sym";
-open  LIBREPCB_SYM , ">  $librepcb_file";
+my     $path           = "${home}/sym";
+mkdir  $path,0755      unless( -e $path );
+my     $symbol_uuid    =  uuid();
+$path                  = "${home}/sym/${symbol_uuid}";
+mkdir  $path,0755      unless( -e $path );
+my     $output_file    = "${home}/sym/${symbol_uuid}/symbol.lp";
+my     $librepcb_file  = "${home}/sym/${symbol_uuid}/.librepcb-sym";
+open   LIBREPCB_SYM , ">  $librepcb_file";
 printf LIBREPCB_SYM ("0.1\n");
 close  LIBREPCB_SYM ;
 print "Writing librePCB  File  $output_file\n";  
-open  LIBREPCB_SYM , ">  $output_file";
+open   LIBREPCB_SYM , ">  $output_file";
 
 printf LIBREPCB_SYM ("(librepcb_symbol %s\n",$symbol_uuid);
 printf LIBREPCB_SYM (" (name \"%s\")\n",$prog_name);
@@ -263,18 +252,10 @@ my $unit     = 2.54;
 
 my $base_y  = 0;
 
-
 if($R_count >= $L_count)
-{
-             $base_y = int( $R_count/2);
-
-}
+ {$base_y = int( $R_count/2);}
 else
-
-{
-             $base_y =  int($L_count/2);
-
-}
+ {$base_y =  int($L_count/2);}
 
 
 
@@ -289,13 +270,10 @@ my $L_position_y = $base_y * $unit;
 
 
 
-foreach $line (@intel_hex)
+foreach $line (@pin_buffer_array)
   {
-
-
-
    $_ = $line; 
-       if(/(\w+),(\w+),(\w+),(\w+),(\w+),(\S+)/)
+       if(/:::(\w+):::(\w+):::(\w+):::(\w+):::(\w+):::(\S+):::(\S+):::/)
           { 
             $cmp_name  = $1;
 	    $side      = $2;
@@ -303,20 +281,17 @@ foreach $line (@intel_hex)
 	    $bank      = $4;
 	    $ball      = $5;
 	    $signal_uuid      = $6;
-            $result    = $signal_uuid ;
+	    $pin_uuid      = $7;
 
-
-
-
-             if($side eq "R")
+            if($side eq "R")
 	     {
-             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$result,$cmp_name);
+             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$signal_uuid,$cmp_name);
  	     printf LIBREPCB_SYM  (" (position %.2f %.2f ) (rotation 180.0 )    ( length 2.54 )\n)\n", $R_position_x,$R_position_y     );
              $R_position_y =  $R_position_y -2.54;
              }
              else
 	     {
-             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$result,$cmp_name);
+             printf LIBREPCB_SYM (" (pin %s  (name \"%s\")\n",$signal_uuid,$cmp_name);
  	     printf LIBREPCB_SYM  (" (position %.2f %.2f ) (rotation 0.0 )    ( length 2.54 )\n)\n", $L_position_x,$L_position_y     );
              $L_position_y =  $L_position_y -2.54;
              }
@@ -335,16 +310,9 @@ foreach $line (@intel_hex)
 my $position_y = 0;
 
 if($R_position_y >= $L_position_y)
-{
-             $position_y =  $L_position_y -2.54;
-
-}
+ {$position_y =  $L_position_y -2.54;}
 else
-
-{
-             $position_y =  $R_position_y -2.54;
-
-}
+ {$position_y =  $R_position_y -2.54;}
 
 
 my $T_position_y = ($base_y * $unit) + (2* $unit);
@@ -388,18 +356,18 @@ close  LIBREPCB_SYM ;
 
 
 
-my $path           = "${home}/cmp";
-mkdir $path,0755       unless( -e $path );
-my $component_uuid =  uuid();
-$path      = "${home}/cmp/${component_uuid}";
-mkdir $path,0755   unless( -e $path );
-my $output_file  = "${home}/cmp/${component_uuid}/component.lp";
-my $librepcb_file  = "${home}/cmp/${component_uuid}/.librepcb-cmp";
-open  LIBREPCB_CMP , ">  $librepcb_file";
+my     $path            = "${home}/cmp";
+mkdir  $path,0755       unless( -e $path );
+my     $component_uuid  =  uuid();
+$path                   = "${home}/cmp/${component_uuid}";
+mkdir  $path,0755       unless( -e $path );
+my     $output_file     = "${home}/cmp/${component_uuid}/component.lp";
+my     $librepcb_file   = "${home}/cmp/${component_uuid}/.librepcb-cmp";
+open   LIBREPCB_CMP , ">  $librepcb_file";
 printf LIBREPCB_CMP ("0.1\n");
 close  LIBREPCB_CMP ;
-print "Writing librePCB  File  $output_file\n";  
-open  LIBREPCB_CMP , ">  $output_file";
+print  "Writing librePCB  File  $output_file\n";  
+open   LIBREPCB_CMP , ">  $output_file";
 
 printf LIBREPCB_CMP ("(librepcb_component %s\n",$component_uuid);
 printf LIBREPCB_CMP (" (name \"%s\")\n",$prog_name);
@@ -415,17 +383,10 @@ printf LIBREPCB_CMP (" (default_value \"{{PARTNUMBER or DEVICE}}\")\n");
 printf LIBREPCB_CMP (" (prefix \"U\")\n");
 
 
-
-
-
-
-
-
-
-foreach $line (@intel_hex)
+foreach $line (@pin_buffer_array)
   {
    $_ = $line; 
-       if(/(\w+),(\w+),(\w+),(\w+),(\w+),(\S+)/)
+       if(/:::(\w+):::(\w+):::(\w+):::(\w+):::(\w+):::(\S+):::(\S+):::/)
           { 
             $cmp_name  = $1;
 	    $side      = $2;
@@ -433,7 +394,8 @@ foreach $line (@intel_hex)
 	    $bank      = $4;
 	    $ball      = $5;
 	    $signal_uuid      = $6;
-            printf LIBREPCB_CMP ("   (signal %s  (name \"%s\") (role passive)\n",$signal_uuid,$cmp_name);
+	    $pin_uuid      = $7;
+            printf LIBREPCB_CMP ("   (signal %s  (name \"%s\") (role passive)\n",$pin_uuid,$cmp_name);
 
             if( $side eq "L")
 	    {
@@ -448,11 +410,8 @@ foreach $line (@intel_hex)
 
     }
 
-
-
 $variant_uuid = uuid();
 $gate_uuid = uuid();
-
 
 printf LIBREPCB_CMP ("(variant %s (norm \"\")\n",$variant_uuid);
 printf LIBREPCB_CMP ("(name \"default\")\n");
@@ -462,22 +421,19 @@ printf LIBREPCB_CMP ("(symbol %s )\n",$symbol_uuid);
 printf LIBREPCB_CMP ("(position 0.0 0.0) (rotation 0.0) (required true) (suffix \"\")\n");
 
 
-
-
-
-foreach $line (@intel_hex)
+foreach $line (@pin_buffer_array)
   {
    $_ = $line; 
-       if(/(\w+),(\w+),(\w+),(\w+),(\w+),(\S+)/)
+       if(/:::(\w+):::(\w+):::(\w+):::(\w+):::(\w+):::(\S+):::(\S+):::/)
           { 
-            $cmp_name  = $1;
-	    $side      = $2;
-	    $type      = $3;
-	    $bank      = $4;
-	    $ball      = $5;
-	    $signal_uuid      = $6;
-            $pin_uuid  = uuid();
-	    printf LIBREPCB_CMP ("   (pin %s  (signal %s ) (text signal))\n",$pin_uuid,$signal_uuid);
+            $cmp_name      = $1;
+	    $side          = $2;
+	    $type          = $3;
+	    $bank          = $4;
+	    $ball          = $5;
+	    $signal_uuid   = $6;
+            $pin_uuid      = $7;;
+	    printf LIBREPCB_CMP ("   (pin %s  (signal %s ) (text signal))\n",$signal_uuid,$pin_uuid);
         }
 
     }
@@ -502,43 +458,6 @@ close  LIBREPCB_CMP ;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#############################################################################
-## 
-##  convert 0-9,A-F to decimal or 0 if out of range
-## 
-#############################################################################
-
-
-sub cvt { 
-
-$temp =    ord($_[0]);
-if( $temp <= 48) { return 0 }
-if( $temp <= 58) { return $temp - 48 }
-if( $temp <= 64) { return 0 }
-if( $temp <= 70) { return ($temp - 65)+10 }
-return 0;
-
-
-
-}
 
 
 
