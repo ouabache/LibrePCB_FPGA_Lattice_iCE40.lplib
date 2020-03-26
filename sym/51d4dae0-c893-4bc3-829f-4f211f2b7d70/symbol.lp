@@ -1,6 +1,6 @@
 (librepcb_symbol 51d4dae0-c893-4bc3-829f-4f211f2b7d70
  (name "iCE40-HX8K-CT256")
- (description "created from file---  ./Lattice/iCE40-HX8K-CT256.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
+ (description "created from file---  ./src_files/iCE40-HX8K-CT256.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

@@ -1,6 +1,6 @@
 (librepcb_symbol 669d05bc-455b-4b6f-87f0-05a7cfe5f1f9
  (name "iCE40-HX8K-CM225")
- (description "created from file---  ./Lattice/iCE40-HX8K-CM225.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
+ (description "created from file---  ./src_files/iCE40-HX8K-CM225.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

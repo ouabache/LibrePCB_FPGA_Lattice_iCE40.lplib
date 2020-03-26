@@ -1,6 +1,6 @@
 (librepcb_component 12b1c6f4-456f-498a-afa4-ada78e4a8069
  (name "iCE40-UP3K-UWG30")
- (description "created from file---  ./Lattice/iCE40-UP3K-UWG30.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
+ (description "created from file---  ./src_files/iCE40-UP3K-UWG30.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

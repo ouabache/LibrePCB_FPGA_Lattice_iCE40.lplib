@@ -1,6 +1,6 @@
 (librepcb_component ff4e213c-f75d-4567-97a2-76e6fca7e665
  (name "iCE40-HX8K-CB132")
- (description "created from file---  ./Lattice/iCE40-HX8K-CB132.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
+ (description "created from file---  ./src_files/iCE40-HX8K-CB132.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

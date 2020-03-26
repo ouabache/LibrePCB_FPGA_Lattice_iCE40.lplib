@@ -1,6 +1,6 @@
 (librepcb_component ef0df081-7f9b-4e97-8ec8-f1099d62202b
  (name "iCE40-HX1K-TQ144")
- (description "created from file---  ./Lattice/iCE40-HX1K-TQ144.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
+ (description "created from file---  ./src_files/iCE40-HX1K-TQ144.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
  (keywords "Fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

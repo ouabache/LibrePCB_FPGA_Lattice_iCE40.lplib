@@ -1,6 +1,6 @@
 (librepcb_symbol ff636deb-59f6-4f1e-8d9e-fb8263c3aa7b
  (name "iCE40-HX1K-CB132")
- (description "created from file---  ./Lattice/iCE40-HX1K-CB132.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
+ (description "created from file---  ./src_files/iCE40-HX1K-CB132.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
  (keywords "Fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

@@ -1,6 +1,6 @@
 (librepcb_component 9b2e307e-c04c-4cba-810d-667f58798aec
  (name "iCE40-LP384-CM36")
- (description "created from file---  ./Lattice/iCE40-LP384-CM36.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
+ (description "created from file---  ./src_files/iCE40-LP384-CM36.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

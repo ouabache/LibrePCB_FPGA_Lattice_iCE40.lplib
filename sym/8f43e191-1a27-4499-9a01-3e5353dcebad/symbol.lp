@@ -1,6 +1,6 @@
 (librepcb_symbol 8f43e191-1a27-4499-9a01-3e5353dcebad
  (name "iCE40-LP4K-CM81")
- (description "created from file---  ./Lattice/iCE40-LP4K-CM81.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
+ (description "created from file---  ./src_files/iCE40-LP4K-CM81.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

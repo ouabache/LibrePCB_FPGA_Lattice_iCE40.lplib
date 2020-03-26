@@ -1,6 +1,6 @@
 (librepcb_symbol 78e42184-c9d1-49a9-9055-977517570edd
  (name "iCE40-HX8K-BG121")
- (description "created from file---  ./Lattice/iCE40-HX8K-BG121.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
+ (description "created from file---  ./src_files/iCE40-HX8K-BG121.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

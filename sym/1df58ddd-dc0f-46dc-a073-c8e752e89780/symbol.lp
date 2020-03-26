@@ -1,6 +1,6 @@
 (librepcb_symbol 1df58ddd-dc0f-46dc-a073-c8e752e89780
  (name "iCE40-LP1K-SWG16TR")
- (description "created from file---  ./Lattice/iCE40-LP1K-SWG16TR.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
+ (description "created from file---  ./src_files/iCE40-LP1K-SWG16TR.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

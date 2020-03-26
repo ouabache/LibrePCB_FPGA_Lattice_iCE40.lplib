@@ -1,6 +1,6 @@
 (librepcb_component bda7826c-8def-4424-82c3-18d99ab70e40
  (name "iCE40-LP1K-CM49")
- (description "created from file---  ./Lattice/iCE40-LP1K-CM49.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
+ (description "created from file---  ./src_files/iCE40-LP1K-CM49.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

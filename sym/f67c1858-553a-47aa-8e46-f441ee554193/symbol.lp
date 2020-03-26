@@ -1,6 +1,6 @@
 (librepcb_symbol f67c1858-553a-47aa-8e46-f441ee554193
  (name "iCE40-UP5K-UWG30")
- (description "created from file---  ./Lattice/iCE40-UP5K-UWG30.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
+ (description "created from file---  ./src_files/iCE40-UP5K-UWG30.csv.\nVariant-default\nGenerated with librepcb-parts-generator (generate_sym.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")

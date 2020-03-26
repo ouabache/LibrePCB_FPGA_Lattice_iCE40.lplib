@@ -1,6 +1,6 @@
 (librepcb_component e328f51c-e137-4e64-8e63-b701d4ad5507
  (name "iCE40-LP4K-CM225")
- (description "created from file---  ./Lattice/iCE40-LP4K-CM225.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
+ (description "created from file---  ./src_files/iCE40-LP4K-CM225.csv.\nGenerated with librepcb-parts-generator (generate_cmp.py)")
  (keywords "fpga,Lattice,iCE40")
  (author "John Eaton")
  (version "0.1")
